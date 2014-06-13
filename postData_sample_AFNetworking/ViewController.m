@@ -7,6 +7,14 @@
 //
 
 #import "ViewController.h"
+// import AFNetworking library header"
+#import "AFNetworking.h"
+
+
+static NSString *const BaseURLString =
+@"http://yourIP.php";
+
+
 
 @interface ViewController ()
 
@@ -17,8 +25,41 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+	[self loadWebserverData];
 }
+
+// ======================AFNetworking======================
+// use AFNetworking
+-(void) loadWebserverData
+{
+    AFHTTPRequestOperationManager *manager =
+    [AFHTTPRequestOperationManager manager];
+    
+    manager.responseSerializer.acceptableContentTypes =
+    [NSSet setWithObject:@"text/html"];
+    
+    NSDictionary *parameters = @{@"data" : @"hello world"};
+
+    
+    [manager POST:BaseURLString
+       parameters:parameters
+          success:^(AFHTTPRequestOperation *operation, id responseObject) {
+              NSLog(@" JSON: %@ ", responseObject);
+              //       NSDictionary *responseJSONObj =[NSJSONSerialization
+              // JSONObjectWithData:responseObj];
+              
+              NSLog(@"result:%@", [responseObject objectForKey:@"result"]);
+   
+              
+          }
+          failure:^(AFHTTPRequestOperation *operation,
+                    NSError *error) {
+              NSLog(@"error %@,", error);
+              
+
+          }];
+}
+// ======================AFNetworking======================
 
 - (void)didReceiveMemoryWarning
 {
